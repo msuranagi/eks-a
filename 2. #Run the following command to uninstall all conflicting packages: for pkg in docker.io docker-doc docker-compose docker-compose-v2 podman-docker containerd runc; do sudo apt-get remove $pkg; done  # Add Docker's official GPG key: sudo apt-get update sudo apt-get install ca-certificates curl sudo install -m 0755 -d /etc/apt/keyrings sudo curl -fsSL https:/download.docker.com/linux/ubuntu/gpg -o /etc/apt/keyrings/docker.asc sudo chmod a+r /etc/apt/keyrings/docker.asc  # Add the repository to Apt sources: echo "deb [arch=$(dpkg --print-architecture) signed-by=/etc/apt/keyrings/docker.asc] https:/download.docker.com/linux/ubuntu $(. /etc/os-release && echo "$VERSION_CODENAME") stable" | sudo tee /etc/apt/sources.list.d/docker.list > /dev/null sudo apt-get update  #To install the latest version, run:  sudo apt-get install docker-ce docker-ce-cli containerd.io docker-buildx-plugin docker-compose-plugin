@@ -1,0 +1,38 @@
+#########################################################################################
+#eksctl
+
+curl "https://github.com/eksctl-io/eksctl/releases/download/v0.219.0/eksctl_Linux_amd64.tar.gz"  \
+    --silent --location \
+    | tar xz -C /tmp
+sudo install -m 0755 /tmp/eksctl /usr/local/bin/eksctl
+
+#########################################################################################
+#eksctl-anywhere
+
+RELEASE_VERSION=v0.24.1
+EKS_ANYWHERE_TARBALL_URL="https://anywhere-assets.eks.amazonaws.com/releases/eks-a/110/artifacts/eks-a/v0.24.1/linux/amd64/eksctl-anywhere-v0.24.1-linux-amd64.tar.gz"
+curl $EKS_ANYWHERE_TARBALL_URL \
+    --silent --location \
+    | tar xz ./eksctl-anywhere
+sudo install -m 0755 ./eksctl-anywhere /usr/local/bin/eksctl-anywhere
+
+#########################################################################################
+#kubectl
+
+curl -LO https://dl.k8s.io/release/v1.35.0/bin/linux/amd64/kubectl
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+#########################################################################################
+#awscli
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip
+unzip awscliv2.zip
+sudo ./aws/install
+
+#########################################################################################
+#helm
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
