@@ -1,1 +1,52 @@
-eks changes here
+Details of eks-a cluster installation locally
+Requirement - Atleast 16GB ram and 50G storage space
+
+switch to root
+mkdir -p WS/EKS; cd WS/EKS
+
+
+How to install the cluster.
+===============================
+
+	Pre-requisite check
+	In laptop as the resources are less , few additional things to be taken care. 
+		1) Increase the swap if RAM is low (less than 16GB)
+                2) edit /etc/sysctl.conf ) and add below entries or modifications to handle the open files/connections
+
+			vm.swappiness=10
+			fs.inotify.max_user_watches = 1048576
+			fs.inotify.max_user_instances = 512
+
+		3) save the /etc/sysctl.conf and execute below command before installing the cluster
+
+			sudo sysctl -p
+
+
+Main installation
+
+1) make sure you are in the path where you have mgmt.yaml
+
+if the mgmt.yaml is not present then we have to use (eksctl anywhere generate clusterconfig mgmt --provider docker > mgmt.yaml) to create the file and ensure 1control plane and 1 worker is getting installed as part of cluster creation)
+
+2) nohup eksctl anywhere create cluster -f mgmt.yaml --no-timeouts &
+
+3) to see the king cluster components ( export KUBECONFIG=/root/WS/EKS/mgmt/generated/mgmt.kind.kubeconfig)
+
+4) kubectl get po -A  //this will show you the kind cluster content
+
+Once the cluster installation is completed. Bootstrap (kind) cluster will get deleted and all CAPI, CAPD , EKSA components will move form kind cluster to main cluster. export the KUBECONFIG of main cluster (KUBECONFIG=/root/WS/EKS/mgmt/mgmt-eks-a-cluster.kubeconfig)
+to point the reference to main cluster
+
+How to tear down the existing k8s (eks-a) components in laptop
+================================================================
+
+1) remove the existing containers. including one which are stopped (docker ps -a). Also do docker system prune.
+	also remove the network which is unused (ex: docker network rm kind). Note: host, bridge and none network are created by docker and dont remove them
+
+2) cd /root/WS/EKS
+
+3) make sure you are in the path where mgmt and eksa-cli-logs are present.
+
+4) remove the directories ( \rm -R mgmt eksa-cli-logs)
+
+5) clear nohup.out
