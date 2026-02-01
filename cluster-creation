@@ -9,9 +9,9 @@ How to install the cluster.
 ===============================
 
 	Pre-requisite check
-	In laptop as the resources are less , few additional things to be taken care. 
+	In laptop if the resources are less , few additional things to be taken care. 
 		1) Increase the swap if RAM is low (less than 16GB)
-                2) edit /etc/sysctl.conf ) and add below entries or modifications to handle the open files/connections
+                2) edit /etc/sysctl.conf ) and add or modify below entries to handle the open files/connections
 
 			vm.swappiness=10
 			fs.inotify.max_user_watches = 1048576
@@ -26,9 +26,10 @@ Main installation
 
 1) make sure you are in the path where you have mgmt.yaml
 
-if the mgmt.yaml is not present then we have to use (eksctl anywhere generate clusterconfig mgmt --provider docker > mgmt.yaml) to create the file and ensure 1control plane and 1 worker is getting installed as part of cluster creation)
+if the mgmt.yaml is not present then we have to use (eksctl anywhere generate clusterconfig mgmt --provider docker > mgmt.yaml) to create the file and ensure 1 control plane and 1 worker is getting installed as part of cluster creation)
 
 2) nohup eksctl anywhere create cluster -f mgmt.yaml --no-timeouts &
+    //you can monitor the nohup.out in current path to check the progress of installation. If the resources are less this usually takes more than 45 minutes to complete.
 
 3) to see the king cluster components ( export KUBECONFIG=/root/WS/EKS/mgmt/generated/mgmt.kind.kubeconfig)
 
